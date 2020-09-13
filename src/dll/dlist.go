@@ -106,3 +106,58 @@ func (list *Dlist) PopTail() interface{} {
     list.RemoveLink(list.tail)
     return user_data
 }
+
+type DlistIterator struct {
+    dlist *Dlist
+    next  *Dlist_link
+    started bool
+}
+
+func NewDlistIterator(list *Dlist) *DlistIterator {
+    iter := &DlistIterator{
+        dlist: list,
+        started: false,
+        next: nil,
+    }
+    return iter
+}
+
+func (iter *DlistIterator) Next() interface {} {
+
+    if iter.dlist == nil {
+        return nil
+    }
+    if !iter.started && iter.next == nil {
+        iter.started = true
+        iter.next = iter.dlist.head
+    } else if iter.next != nil {
+        iter.next = iter.next.l_next
+    } else {
+        return nil
+    }
+    if iter.next != nil {
+        return iter.next.user_data
+    } else {
+        return nil
+    }
+}
+
+func (iter *DlistIterator) ReverseNext() interface {} {
+
+    if iter.dlist == nil {
+        return nil
+    }
+    if !iter.started && iter.next == nil {
+        iter.started = true
+        iter.next = iter.dlist.tail
+    } else if iter.next != nil {
+        iter.next = iter.next.l_prev
+    } else {
+        return nil
+    }
+    if iter.next != nil {
+        return iter.next.user_data
+    } else {
+        return nil
+    }
+}
